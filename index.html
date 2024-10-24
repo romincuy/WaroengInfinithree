@@ -1,0 +1,281 @@
+<html>
+
+<head>
+    <title>Waroeng Inifinithree</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+        body {
+            font-family: 'Fredoka One', cursive;
+            margin: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+        }
+        
+          .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fdf2e9;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .cart-item p {
+    margin: 0;
+  }
+
+  #cart-modal .modal-content {
+    background-color: #fffaf0;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 600px;
+    width: 90%;
+  }
+
+  #total-price {
+    font-size: 1.5em;
+    color: #d97706;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .button-primary {
+    background-color: #fbbf24;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+
+  .button-primary:hover {
+    background-color: #f59e0b;
+  }
+
+  .button-secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+  }
+
+  .button-secondary:hover {
+    background-color: #e5e7eb;
+  }
+    </style>
+    <script>
+        let cart = [];
+        let prices = {
+            'Gado-Gado': 8000,
+            'Rujak Cocol Queen Kitchen': 10000,
+            'Beras Kencur': 5000,
+            'Sinom': 5000
+        };
+
+        function addToCart(item) {
+            if (!cart.find(i => i.name === item)) {
+                cart.push({ name: item, quantity: 1 });
+            } else {
+                const index = cart.findIndex(i => i.name === item);
+                cart[index].quantity++;
+            }
+            updateCartCount();
+            updateCartList();
+        }
+
+        function updateCartCount() {
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function updateCartList() {
+            const cartList = document.getElementById('cart-list');
+            cartList.innerHTML = '';
+            cart.forEach(item => {
+                const row = document.createElement('div');
+                row.innerHTML = `
+                    <p>${item.name}</p>
+                    <input type="number" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
+                    <p>Rp ${prices[item.name] * item.quantity}</p>
+                `;
+                cartList.appendChild(row);
+            });
+            updateTotalPrice();
+        }
+
+        function updateQuantity(name, quantity) {
+            const index = cart.findIndex(i => i.name === name);
+            cart[index].quantity = parseInt(quantity);
+            updateCartList();
+        }
+
+        function updateTotalPrice() {
+            const totalPrice = cart.reduce((acc, item) => acc + prices[item.name] * item.quantity, 0);
+            document.getElementById('total-price').innerText = `Total Harga: Rp ${totalPrice}`;
+            return totalPrice;
+        }
+
+        function checkout() {
+            const name = document.getElementById('name').value;
+            if (name && cart.length > 0) {
+                const totalPrice = updateTotalPrice();
+                const message = `Nama: ${name}\nProduk: ${cart.map(item => `${item.name} x ${item.quantity}`).join('\n')}\nTotal: Rp ${totalPrice || 0}`;
+
+                const whatsappUrl = `https://wa.me/6282143455859?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            } else {
+                alert('Silakan isi nama dan pilih produk terlebih dahulu');
+            }
+        }
+
+        function showDescription(description) {
+            const modal = document.getElementById('modal');
+            const descElement = document.getElementById('item-description');
+            descElement.innerText = description;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+        }
+
+        function showCart() {
+            const cartModal = document.getElementById('cart-modal');
+            cartModal.classList.remove('hidden');
+            updateCartList();
+        }
+
+        function closeCart() {
+            const cartModal = document.getElementById('cart-modal');
+            cartModal.classList.add('hidden');
+        }
+        row.className = 'cart-item';
+
+    </script>
+</head>
+
+<body class="bg-white flex flex-col items-center">
+    <div class="relative w-full max-w-md">
+        <div class="absolute top-0 left-0 w-1/2 h-1/4 bg-yellow-300 rounded-br-full"></div>
+        <div class="absolute bottom-0 right-0 w-1/2 h-1/4 bg-yellow-300 rounded-tl-full -z-10"></div>
+
+        <div class="relative z-10 text-center mt-10">
+            <h1 class="text-4xl text-brown-700">WAROENG INFINITHREE</h1>
+        </div>
+
+        <div class="relative z-10 grid grid-cols-2 gap-4 mt-8">
+            <div class="flex flex-col items-center">
+                <img alt="Gado-Gado" class="rounded-full w-36 h-36 object-cover cursor-pointer"
+                    src="https://storage.googleapis.com/a1aa/image/DOWVBISvLbohBFkHPrgAu9xwNKvHafMwws7EOnrOpLxJrz0JA.jpg"
+                    onclick="showDescription('Gado-Gado: Makanan khas Indonesia yang terdiri dari sayuran, tahu, dan bumbu kacang.')" />
+                <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">8k</div>
+                <p class="mt-2 text-brown-700">GADO-GADO </p>
+                <button onclick="addToCart('Gado-Gado')"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+            </div>
+            <div class="flex flex-col items-center">
+                <img alt="Rujak Cocol Queen Kitchen" class="rounded-full w-36 h-36 object-cover cursor-pointer"
+                    src="https://storage.googleapis.com/a1aa/image/YnYnqDboBJq4FBVSannXvcZktp0yd5sMXPgheKDtd3fUWnpTA.jpg"
+                    onclick="showDescription('Rujak Cocol: Makanan segar yang terdiri dari buah-buahan dan bumbu rujak.')" />
+                <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">10k</div>
+                <p class="mt-2 text-brown-700 text-center">RUJAK COCOL</p>
+                <button onclick="addToCart('Rujak Cocol Queen Kitchen')"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+            </div>
+            <div class="flex flex-col items-center">
+                <img alt="Beras Kencur" class="rounded-full w-36 h-36 object-cover cursor-pointer"
+                    src="https://storage.googleapis.com/a1aa/image/3StQf1Q5rnVHNioTrLfIUtixOlMVdxN8GrqxBPOlEfsusOTnA.jpg"
+                    onclick="showDescription('Beras Kencur: Makanan khas Indonesia yang terdiri dari beras, kencur, dan bumbu lainnya.')" />
+                <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">5k</div>
+                <p class="mt-2 text-brown-700">BERAS KENCUR</p>
+                <button onclick="addToCart('Beras Kencur')"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+            </div>
+            <div class="flex flex-col items-center">
+                <img alt="Sinom" class="rounded-full w-36 h-36 object-cover cursor-pointer"
+                    src="https://storage.googleapis.com/a1aa/image/uzNEZ4e4QJXKZ6uWAWVyswGwI7gzuUlvskTjMVoUbx5Krz0JA.jpg"
+                    onclick="showDescription('Sinom: Makanan khas Indonesia yang terdiri dari daging sapi, kentang, dan bumbu lainnya.')" />
+                <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">5k</div>
+                <p class="mt-2 text-brown-700">SINOM</p>
+                <button onclick="addToCart('Sinom')"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+            </div>
+        </div>
+        <div class="flex flex-col items-center mt-10 relative z-10 bg-white/60 rounded-lg p-4">
+            <div class="flex items-center text-brown-700">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                <p class="text-sm">Lokasi: SMAN 3 Bojonegoro</p>
+            </div>
+            <div class="flex items-center text-brown-700">
+                <i class="fas fa-calendar-alt mr-2"></i>
+                <p class="text-sm">Tanggal: 31 Oktober 2024</p>
+            </div>
+            <p class="text-brown-700 text-sm"><i class="fas fa-handshake mr-2"></i>Kerjasama dengan Queen Kitchen</p>
+            <div class="flex items-center text-brown-700">
+                <i class="fab fa-instagram mr-2"></i>
+                <a href="https://www.instagram.com/inifinithree_ofc/" target="_blank"
+                    class="text-sm flex items-center"></i>@inifinithree_ofc</a>
+            </div>
+        </div>
+
+        <div class="absolute top-2 right-5">
+            <button onclick="showCart()" class="bg-yellow-500 text-white rounded-full px-2 py-1 text-sm"><i
+                    class="fas fa-shopping-cart"></i><span id="cart-count">0</span></button>
+
+        </div>
+    </div>
+
+    <div id="cart-modal" class="hidden modal">
+        <div class="modal-content">
+            <h2 class="text-brown-700">Keranjang</h2>
+            <div id="cart-list"></div>
+            <p id="total-price">Total Harga: Rp 0</p>
+            <form>
+                <label for="name">Nama:</label>
+                <input type="text" id="name" name="name"><br><br>
+                <button onclick="checkout()"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Checkout</button>
+            </form>
+            <button onclick="closeCart()" class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Tutup</button>
+        </div>
+    </div>
+
+    <div id="modal" class="hidden modal">
+        <div class="modal-content">
+            <p id="item-description"></p>
+            <button onclick="closeModal()" class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Tutup</button>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
