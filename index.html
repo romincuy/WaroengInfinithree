@@ -91,6 +91,39 @@
   .button-secondary:hover {
     background-color: #e5e7eb;
   }
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+    body {
+        font-family: 'Fredoka One', cursive;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Membuat body memenuhi layar penuh */
+        justify-content: center; /* Konten di tengah vertikal */
+        overflow-x: hidden; /* Mencegah overflow horizontal */
+    }
+
+    .relative {
+        flex-grow: 1; /* Membuat div utama tumbuh untuk memenuhi tinggi penuh */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        min-height: 100vh; /* Kontainer utama juga harus memenuhi layar */
+    }
+
+    /* Menyembunyikan bagian yang overflow */
+    .modal, .modal-content {
+        overflow: hidden;
+    }
+
+    /* Mengatasi posisi absolut pada elemen dekoratif */
+    .absolute {
+        overflow: hidden;
+    }
+              
     </style>
     <script>
         let cart = [];
