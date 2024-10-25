@@ -1,194 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waroeng Inifinithree</title>
-        <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
-
-        body {
-            font-family: 'Fredoka One', cursive;
-            margin: 0;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-        }
-        
-          .cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fdf2e9;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .cart-item p {
-    margin: 0;
-  }
-
-  #cart-modal .modal-content {
-    background-color: #fffaf0;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
-    width: 90%;
-  }
-
-  #total-price {
-    font-size: 1.5em;
-    color: #d97706;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-
-  .button-primary {
-    background-color: #fbbf24;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-
-  .button-primary:hover {
-    background-color: #f59e0b;
-  }
-
-  .button-secondary {
-    background-color: #f3f4f6;
-    color: #374151;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-  }
-
-  .button-secondary:hover {
-    background-color: #e5e7eb;
-  }
-              
-    </style>
-    <script>
-        let cart = [];
-        let prices = {
-            'Gado-Gado': 8000,
-            'Rujak Cocol Queen Kitchen': 10000,
-            'Beras Kencur': 5000,
-            'Sinom': 5000
-        };
-
-        function addToCart(item) {
-            if (!cart.find(i => i.name === item)) {
-                cart.push({ name: item, quantity: 1 });
-            } else {
-                const index = cart.findIndex(i => i.name === item);
-                cart[index].quantity++;
-            }
-            updateCartCount();
-            updateCartList();
-        }
-
-        function updateCartCount() {
-            document.getElementById('cart-count').innerText = cart.length;
-        }
-
-        function updateCartList() {
-            const cartList = document.getElementById('cart-list');
-            cartList.innerHTML = '';
-            cart.forEach(item => {
-                const row = document.createElement('div');
-                row.innerHTML = `
-                    <p>${item.name}</p>
-                    <input type="number" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)">
-                    <p>Rp ${prices[item.name] * item.quantity}</p>
-                `;
-                cartList.appendChild(row);
-            });
-            updateTotalPrice();
-        }
-
-        function updateQuantity(name, quantity) {
-            const index = cart.findIndex(i => i.name === name);
-            cart[index].quantity = parseInt(quantity);
-            updateCartList();
-        }
-
-        function updateTotalPrice() {
-            const totalPrice = cart.reduce((acc, item) => acc + prices[item.name] * item.quantity, 0);
-            document.getElementById('total-price').innerText = `Total Harga: Rp ${totalPrice}`;
-            return totalPrice;
-        }
-
-        function checkout() {
-            const name = document.getElementById('name').value;
-            if (name && cart.length > 0) {
-                const totalPrice = updateTotalPrice();
-                const message = `Nama: ${name}\nProduk: ${cart.map(item => `${item.name} x ${item.quantity}`).join('\n')}\nTotal: Rp ${totalPrice || 0}`;
-
-                const whatsappUrl = `https://wa.me/6282143455859?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-            } else {
-                alert('Silakan isi nama dan pilih produk terlebih dahulu');
-            }
-        }
-
-        function showDescription(description) {
-            const modal = document.getElementById('modal');
-            const descElement = document.getElementById('item-description');
-            descElement.innerText = description;
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.add('hidden');
-        }
-
-        function showCart() {
-            const cartModal = document.getElementById('cart-modal');
-            cartModal.classList.remove('hidden');
-            updateCartList();
-        }
-
-        function closeCart() {
-            const cartModal = document.getElementById('cart-modal');
-            cartModal.classList.add('hidden');
-        }
-        row.className = 'cart-item';
-
-    </script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="bg-white flex flex-col items-center min-h-screen">
-    <div class="relative w-full max-w-md">
+<body class="bg-white flex flex-col items-center min-h-screen" onload="loadCart()">
+
+
+    <div class="cart-icon">
+        <button onclick="showCart()" class="text-sm"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></button>
+    </div>
+
+   <div class="relative w-full max-w-md">
         <div class="absolute top-0 left-0 w-1/2 h-1/4 bg-yellow-300 rounded-br-full"></div>
         <div class="absolute bottom-0 right-0 w-1/2 h-1/4 bg-yellow-300 rounded-tl-full -z-10"></div>
 
@@ -200,38 +30,39 @@
             <div class="flex flex-col items-center">
                 <img alt="Gado-Gado" class="rounded-full w-36 h-36 object-cover cursor-pointer"
                     src="https://storage.googleapis.com/a1aa/image/DOWVBISvLbohBFkHPrgAu9xwNKvHafMwws7EOnrOpLxJrz0JA.jpg"
-                    onclick="showDescription('Gado-Gado: Sayuran segar dengan siraman bumbu kacang kental, gurih, dan lezat, sempurna untuk santapan sehat.')" />
+                    onclick="showDescription('Gado-Gado: Makanan khas Indonesia yang terdiri dari sayuran, tahu, dan bumbu kacang.')">
                 <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">8k</div>
-                <p class="mt-2 text-brown-700">GADO-GADO </p>
-                <button onclick="addToCart('Gado-Gado')"
-                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+                <p class="mt-2 text-brown-700">GADO-GADO</p>
+                <button onclick="addToCart('Gado-Gado'); animateButton(this)"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2 button-buy">Beli</button>
             </div>
             <div class="flex flex-col items-center">
-                <img alt="Rujak Cocol Queen Kitchen" class="rounded-full w-36 h-36 object-cover cursor-pointer"
+                <img alt="Rujak Cocol" class="rounded-full w-36 h-36 object-cover cursor-pointer"
                     src="https://storage.googleapis.com/a1aa/image/YnYnqDboBJq4FBVSannXvcZktp0yd5sMXPgheKDtd3fUWnpTA.jpg"
-                    onclick="showDescription('Rujak Cocol: Buah segar dipadukan dengan sambal khas yang pedas-manis, bikin segar dan ketagihan.')" />
+                    onclick="showDescription('Rujak Cocol: Makanan segar yang terdiri dari buah-buahan dan bumbu rujak.')">
                 <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">10k</div>
                 <p class="mt-2 text-brown-700 text-center">RUJAK COCOL</p>
-                <button onclick="addToCart('Rujak Cocol Queen Kitchen')"
-                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+                <button onclick="addToCart('Rujak Cocol'); animateButton(this)"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2 button-buy">Beli</button>
             </div>
+            
             <div class="flex flex-col items-center">
-                <img alt="Beras Kencur" class="rounded-full w-36 h-36 object-cover cursor-pointer"
+                <img alt="Beras Kencur" class="rounded-full w -36 h-36 object-cover cursor-pointer"
                     src="https://storage.googleapis.com/a1aa/image/3StQf1Q5rnVHNioTrLfIUtixOlMVdxN8GrqxBPOlEfsusOTnA.jpg"
-                    onclick="showDescription('Beras Kencur: Minuman tradisional kaya manfaat, rasanya segar dan cocok untuk menjaga stamina tubuh.')" />
+                    onclick="showDescription('Beras Kencur: Makanan khas Indonesia yang terdiri dari beras, kencur, dan bumbu lainnya.')">
                 <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">5k</div>
                 <p class="mt-2 text-brown-700">BERAS KENCUR</p>
-                <button onclick="addToCart('Beras Kencur')"
-                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+                <button onclick="addToCart('Beras Kencur'); animateButton(this)"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2 button-buy">Beli</button>
             </div>
             <div class="flex flex-col items-center">
                 <img alt="Sinom" class="rounded-full w-36 h-36 object-cover cursor-pointer"
                     src="https://storage.googleapis.com/a1aa/image/uzNEZ4e4QJXKZ6uWAWVyswGwI7gzuUlvskTjMVoUbx5Krz0JA.jpg"
-                    onclick="showDescription('Sinom: Minuman asam-manis yang menyejukkan, pas untuk menyegarkan tenggorokan dan merilekskan tubuh.')" />
+                    onclick="showDescription('Sinom: Makanan khas Indonesia yang terdiri dari daging sapi, kentang, dan bumbu lainnya.')">
                 <div class="bg-yellow-200 rounded-full px-4 py-1 mt-2 text-brown-700">5k</div>
                 <p class="mt-2 text-brown-700">SINOM</p>
-                <button onclick="addToCart('Sinom')"
-                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Beli</button>
+                <button onclick="addToCart('Sinom'); animateButton(this)"
+                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2 button-buy">Beli</button>
             </div>
         </div>
         <div class="flex flex-col items-center mt-10 relative z-10 bg-white/60 rounded-lg p-4">
@@ -244,46 +75,52 @@
                 <p class="text-sm">Tanggal: 31 Oktober 2024</p>
             </div>
             <p class="text-brown-700 text-sm">
-    <i class="fas fa-handshake mr-2"></i>
-    Kerjasama dengan 
-    <a href="https://www.instagram.com/queenkitchen175?igsh=ZGg1ZXZldnhtaWtk" target="_blank" class="text-blue-500 underline">Queen Kitchen</a>
-</p>
+                <i class="fas fa-handshake mr-2"></i>
+                Kerjasama dengan 
+                <a href="https://www.instagram.com/queenkitchen175?igsh=ZGg1ZXZldnhtaWtk" target="_blank" class="text-blue-500 underline">Queen Kitchen</a>
+            </p>
             <div class="flex items-center text-brown-700">
                 <i class="fab fa-instagram mr-2"></i>
                 <a href="https://www.instagram.com/inifinithree_ofc/" target="_blank"
                     class="text-sm flex items-center"></i>@inifinithree_ofc</a>
             </div>
         </div>
-
-        <div class="absolute top-2 right-5">
-            <button onclick="showCart()" class="bg-yellow-500 text-white rounded-full px-2 py-1 text-sm"><i
-                    class="fas fa-shopping-cart"></i><span id="cart-count">0</span></button>
-
-        </div>
     </div>
 
     <div id="cart-modal" class="hidden modal">
-        <div class="modal-content">
-            <h2 class="text-brown-700">Keranjang</h2>
-            <div id="cart-list"></div>
-            <p id="total-price">Total Harga: Rp 0</p>
-            <form>
-                <label for="name">Nama:</label>
-                <input type="text" id="name" name="name"><br><br>
-                <button onclick="checkout()"
-                    class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Checkout</button>
-            </form>
-            <button onclick="closeCart()" class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Tutup</button>
+       <div class="modal-content">
+    <h2 class="modal-header">Keranjang Anda</h2>
+    <div id="cart-list"></div>
+    <p id="total-price">Total Harga: Rp 0</p>
+    <form class="text-center">
+        <label for="name">Nama:</label>
+        <input type="text" id="name" name="name" placeholder="Masukkan nama Anda" class="w-full border border-gray-300 rounded-lg p-2 mt-2 mb-4">
+    
+        <!-- Input pesan tambahan -->
+        <label for="message">Pesan untuk Penjual (Opsional):</label>
+        <textarea id="message" name="message" placeholder="Tulis pesan untuk penjual..." class="w-full border border-gray-300 rounded-lg p-2 mt-2 mb-4"></textarea>
+    
+        <!-- Tombol Checkout dan Kembali -->
+        <div class="button-wrapper mt-2">
+            <button onclick="checkout()" class="button-primary">Checkout</button>
+            <button type="button" onclick="closeCartWithoutRefresh()" class="button-secondary">Kembali</button>
         </div>
+    </form>
+    
+    
+</div>
     </div>
 
-    <div id="modal" class="hidden modal">
-        <div class="modal-content">
-            <p id="item-description"></p>
-            <button onclick="closeModal()" class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-2">Tutup</button>
+    <div id="description-modal" class="hidden description-modal">
+        <div class="description-modal-content">
+            <p id="item-description" class="text-center text-gray-800"></p>
+            <button onclick="closeModal()" class="bg-yellow-500 text-white rounded-full px-4 py-1 mt-4">Tutup</button>
         </div>
     </div>
-    </div>
+    
+
+
+
+<script src="script.js"></script>
 </body>
-
 </html>
