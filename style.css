@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+        /* Custom styling */
+        body {
+            font-family: 'Fredoka One', cursive;
+            margin: 0;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Background semi-transparan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.8); /* Background transparan */
+    backdrop-filter: blur(10px); /* Efek blur */
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh; /* Membatasi tinggi modal */
+    overflow-y: auto; /* Mengaktifkan scroll */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    border: 2px solid #f59e0b;
+}
+
+/* Membuat daftar produk di dalam modal bisa di-scroll */
+#cart-list {
+    max-height: 50vh; /* Tinggi maksimal untuk daftar produk */
+    overflow-y: auto; /* Aktifkan scroll hanya pada daftar produk */
+}
+
+
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    background-color: #fffaf0;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 12px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item:hover {
+    background-color: #ffefd5;
+}
+
+    .cart-item p {
+        margin: 0;
+        flex: 1;
+        color: #333;
+    }
+
+    .quantity-input {
+        width: 60px;
+        padding: 6px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid #ddd;
+    }
+
+    #total-price {
+        font-size: 1.6em;
+        color: #f59e0b;
+        font-weight: bold;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+    
+
+
+.button-primary {
+    background-color: #34d399;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    font-weight: medium;
+}
+
+.button-secondary {
+    background-color: #e53e3e;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+
+.button-primary:hover {
+    background-color: #10b981;
+}
+
+.quantity-button {
+    background-color: #34d399;
+    color: white;
+    padding: 4px 8px; /* Ukuran padding lebih kecil */
+    border-radius: 4px;
+    font-size: 0.875rem; /* Ukuran font lebih kecil */
+    margin: 0 4px;
+    width: 24px; /* Lebar tombol disesuaikan */
+    height: 24px; /* Tinggi tombol disesuaikan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-button:hover {
+    background-color: #10b981;
+}
+
+.quantity {
+    font-weight: bold;
+    color: #333;
+}
+
+
+.button-secondary:hover {
+    background-color: #c53030;
+}
+
+    .button-primary, .button-secondary {
+    flex: 1;
+    font-weight: medium;
+    padding: 10px 0;
+}
+
+    .modal-header {
+        text-align: center;
+        font-size: 1.8em;
+        color: #d97706;
+        font-weight: bold;
+    }
+        /* Tambahkan CSS untuk membuat ikon keranjang fixed */
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #fbbf24;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover effect */
+.button-buy {
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.button-buy:hover {
+    transform: scale(1.1); /* Memperbesar tombol saat hover */
+    background-color: #f59e0b; /* Warna lebih gelap saat hover */
+}
+
+/* Animasi saat tombol diklik */
+.button-buy:active {
+    transform: scale(0.95); /* Mengecilkan tombol sedikit saat diklik */
+    background-color: #d97706; /* Warna lebih gelap */
+}
+
+/* Tambahkan kelas untuk animasi klik di mobile */
+.button-click {
+    transform: scale(0.95); /* Mengecilkan sedikit untuk efek ketukan */
+    background-color: #d97706; /* Warna lebih gelap saat animasi */
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+/* Modal khusus untuk deskripsi */
+.description-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* Latar belakang semi-transparan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.description-modal.show {
+    opacity: 1; /* Muncul dengan efek */
+}
+
+/* Konten modal khusus */
+.description-modal-content {
+    background-color: #fff8dc; /* Warna background berbeda */
+    padding: 20px 30px;
+    border-radius: 12px;
+    max-width: 350px;
+    width: 85%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-20px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Untuk menempatkan konten secara tengah */
+}
+
+.description-modal.show .description-modal-content {
+    opacity: 1;
+    transform: translateY(0); /* Efek slide-up */
+}
+
+/* Tombol Tutup */
+.close-button {
+    background-color: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.close-button:hover {
+    background-color: #d97706; /* Warna hover */
+}
